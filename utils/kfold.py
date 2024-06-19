@@ -9,7 +9,7 @@ class KFold:
         self.num_folds = num_folds
         self.num_observations = num_observations
 
-        self.indices = self.generate_indices(mode = "normal")
+        self.indices = self.generate_indices(mode = "random")
         
         self.X_fold = []
         self.y_fold = []
