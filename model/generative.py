@@ -42,6 +42,11 @@ class Bayesian(GenerativeModel):
     def __init__(self, data_dir, label="species"):
         super().__init__(data_dir, label)
 
+    def softmax(self, y):
+        exp_y = np.exp(y)
+        sum_y = np.sum(exp_y, axis = 1, keepdims = True)
+        return exp_y / sum_y 
+
     def train(self):
         X_train, y_train, X_val, y_val = None, None, None, None
         for i in range(self.num_folds):
@@ -52,6 +57,7 @@ class Bayesian(GenerativeModel):
             w, bias = self.get_coefficients(X_train, y_train)
 
             y_pred = self.predict(X_val, w, bias)
+            y_pred = self.softmax(y_pred)
             y_pred = np.argmax(y_pred, axis = 1).reshape(-1, 1)
 
             confusion_matrix = self.get_confusion_matrix(y_val, y_pred)
