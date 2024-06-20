@@ -1,15 +1,15 @@
-import random
 import numpy as np
 
 class KFold:
-    def __init__(self, X, y, num_folds, num_observations):
+    def __init__(self, X, y, num_folds, num_observations, mode = "random", random_state = 42):
         self.X = X
         self.y = y
         
         self.num_folds = num_folds
         self.num_observations = num_observations
 
-        self.indices = self.generate_indices(mode = "random")
+        self.random_state = random_state
+        self.indices = self.generate_indices(mode)
         
         self.X_fold = []
         self.y_fold = []
@@ -25,6 +25,7 @@ class KFold:
         if mode == "normal":
             indices = list(range(self.num_observations))
         elif mode == "random":
+            np.random.seed(self.random_state)
             indices = np.random.permutation(self.num_observations)
 
         for i in range(self.num_folds):
