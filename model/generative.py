@@ -9,7 +9,6 @@ class GenerativeModel(Classifier):
         self.w = []
         self.bias = []
         self.confusion_matrix = []
-        self.accuracy = None
 
         self.num_folds = 5
         self.kfold = KFold(X = self.X, y = self.y, num_folds=self.num_folds, num_observations=self.num_observations)

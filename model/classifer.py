@@ -15,6 +15,8 @@ class Classifier:
         self.categories = self.dataset[label].cat.categories
         self.num_categories = len(self.categories)
 
+        self.accuracy = None
+
     def group_by_class(self, X, y):
         results = []
         for i in range(self.num_categories):
@@ -36,8 +38,10 @@ class Classifier:
         return confusion_matrix
     
     def print_evaluation(self):
-        confusion_matrix = np.sum(self.confusion_matrix, axis = 0)
+        confusion_matrix = np.sum(self.confusion_matrix, axis=0)
+        
         if self.accuracy is None:
             self.accuracy = np.trace(confusion_matrix) / np.sum(confusion_matrix)
+        
         print("Accuracy: ", self.accuracy)
         print("Confusion Matrix:\n", confusion_matrix)

@@ -10,7 +10,6 @@ class DiscriminativeModel(Classifier):
 
         self.W = []
         self.confusion_matrix = []
-        self.accuracy = None
 
         dummy_vector = np.ones(self.num_observations).reshape(-1, 1)
         self.X = np.concatenate([self.X, dummy_vector], axis = 1)
