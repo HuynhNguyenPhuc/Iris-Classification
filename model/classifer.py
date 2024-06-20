@@ -15,6 +15,8 @@ class Classifier:
         self.categories = self.dataset[label].cat.categories
         self.num_categories = len(self.categories)
 
+        print(self.categories)
+
         self.accuracy = None
 
     def group_by_class(self, X, y):

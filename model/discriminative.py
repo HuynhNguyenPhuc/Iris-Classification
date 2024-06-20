@@ -27,8 +27,7 @@ class OneVsOne(DiscriminativeModel):
 
     def convert(self, y, u, v):
         u_vector = (y == u).astype(int).reshape(-1, 1)
-        noise_vector = (((y - u)*(y - v) != 0).astype(int) * np.random.randint(2, size=y.shape)).reshape(-1, 1)
-        return np.concatenate([1 - u_vector - noise_vector, u_vector + noise_vector], axis = 1)
+        return np.concatenate([1 - u_vector, u_vector], axis = 1)
 
     def train(self):
         X_train, y_train, X_val, y_val = None, None, None, None
@@ -38,10 +37,13 @@ class OneVsOne(DiscriminativeModel):
             for u in range(self.num_categories):
                 for v in range(self.num_categories):
                     if u >= v:
-                        continue               
-                    y_train_temp = self.convert(y_train, u, v)
+                        continue
+                    indices = ((y_train - u)*(y_train - v) == 0)
+                    X_train_temp = X_train[indices]
+                    y_train_temp = y_train[indices] 
+                    y_train_temp = self.convert(y_train_temp, u, v)
 
-                    W = np.linalg.inv(X_train.T @ X_train) @ X_train.T @ y_train_temp
+                    W = np.linalg.inv(X_train_temp.T @ X_train_temp) @ X_train_temp.T @ y_train_temp
                     self.W.append(W)
                     prediction = np.argmax(self.predict(W, X_val), axis = 1).reshape(-1, 1)
                     prediction = (prediction * u + (1 - prediction) * v).astype(int)
